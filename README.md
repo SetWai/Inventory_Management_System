@@ -1,4 +1,4 @@
-📦 Advanced Inventory Management System
+📦 Inventory Management System
 
 A secure, professional, and high-performance Inventory Management System built with a **Django REST Framework (DRF)** backend and a **React (JSX)** frontend. This project is specifically enhanced with robust security measures to prevent server overload and unauthorized employee access.
 
