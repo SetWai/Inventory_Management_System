@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8msf)1*)$u%_9b-q%(5-nif64yo3rfme1)f_g5bfq5+rh!&y#4'
+SECRET_KEY = os.getenv('SECRET_KEY', 'default-insecure-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -134,20 +135,19 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', # Login ဝင်ထားမှ သုံးလို့ရမည်
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '3/minute',  # 🌟 IP တစ်ခုဟာ ၁ မိနစ်ကို ၃ ကြိမ်ထက်ပို၍ အကောင့်လှမ်းဖွင့်ခွင့် မရှိစေရန် ပိတ်ပင်ခြင်း
-    }
+        'anon': '3/minute',
+    },
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 SIMPLE_JWT = {
-    # Access Token သက်တမ်းကို ၃၀ စက္ကန့်သာ သတ်မှတ်ပါသည်
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=30),
-    
-    # Refresh Token ကိုတော့ ပုံမှန်အတိုင်း ထားနိုင်ပါတယ်
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'ALGORITHM': 'HS256',

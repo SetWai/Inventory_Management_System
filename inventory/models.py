@@ -22,7 +22,7 @@ class Product(models.Model):
     sku = models.CharField(max_length=50, null=True, unique=True) 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    unit = models.CharField(max_length=5, choices=UNIT_CHOICES, default='KG')
+    unit = models.CharField(max_length=20, default='PCS')
     min_stock_level = models.DecimalField(max_digits=10, decimal_places=2, default=5.00)
     last_updated = models.DateTimeField(auto_now=True)
 
