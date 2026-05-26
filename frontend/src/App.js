@@ -19,6 +19,25 @@ function NavigationInterceptor({ setToken }) {
 }
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode === 'true' ? true : false;
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('bg-dark', 'text-light');
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.body.classList.remove('bg-dark', 'text-light');
+      localStorage.setItem('darkMode', 'false');
+    }
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   const handleLogout = () => {
@@ -51,6 +70,12 @@ function App() {
                 <button className="btn btn-outline-danger ms-3" onClick={handleLogout}>
                   Logout
                 </button>
+                <button 
+                  className={`btn btn-primary me-2 ${isDarkMode ? 'btn-light' : 'btn-dark'}`} 
+                  onClick={toggleDarkMode}
+                >
+                  {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                </button>
               </>
             )}
           </div>
@@ -60,14 +85,14 @@ function App() {
       <div className="container">
         <Routes>
           {/* Login Route */}
-          <Route path="/login" element={!token ? <Login setToken={setToken} /> : <Navigate to="/" />} />
-          <Route path="/register" element={!token ? <Register /> : <Navigate to="/" />} /> {/* 🌟 လမ်းကြောင်းအသစ် ထည့်သွင်းခြင်း */}
+          <Route path="/login" element={!token ? <Login setToken={setToken} isDarkMode={isDarkMode}/> : <Navigate to="/" />} />
+          <Route path="/register" element={!token ? <Register isDarkMode={isDarkMode}/> : <Navigate to="/" />} /> 
           {/* Protected Routes */}
-          <Route path="/" element={token ? <ProductList /> : <Navigate to="/login" />} />
-          <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/add-product" element={token ? <AddProduct /> : <Navigate to="/login" />} />
-          <Route path="/add-category" element={token ? <AddCategory /> : <Navigate to="/login" />} />
-          <Route path="/add-transaction" element={token ? <AddTransaction /> : <Navigate to="/login" />} />
+          <Route path="/" element={token ? <ProductList isDarkMode={isDarkMode}/> : <Navigate to="/login" />} />
+          <Route path="/dashboard" element={token ? <Dashboard isDarkMode={isDarkMode}/> : <Navigate to="/login" />} />
+          <Route path="/add-product" element={token ? <AddProduct isDarkMode={isDarkMode}/> : <Navigate to="/login" />} />
+          <Route path="/add-category" element={token ? <AddCategory isDarkMode={isDarkMode}/> : <Navigate to="/login" />} />
+          <Route path="/add-transaction" element={token ? <AddTransaction isDarkMode={isDarkMode}/> : <Navigate to="/login" />} />
 
           {/* Catch-all Redirect */}
           <Route path="*" element={<Navigate to={token ? "/" : "/login"} />} />

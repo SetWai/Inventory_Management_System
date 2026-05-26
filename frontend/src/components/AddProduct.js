@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import API from '../api';
+import Swal from 'sweetalert2';
 
 function AddProduct() {
   const navigate = useNavigate();
@@ -31,14 +32,24 @@ function AddProduct() {
     if (editData) {
       API.put(`products/${editData.id}/`, data)
         .then(() => {
-          alert("Product Updated successfully!");
+          Swal.fire({
+            title: 'Updated!', 
+            text: 'Product updated successfully.', 
+            icon: 'success',
+            theme: 'auto',
+         });
           navigate('/');
         })
         .catch(err => handleError(err));
     } else {
       API.post('products/', data)
         .then(res => {
-          alert("Product added successfully!");
+          Swal.fire({
+            title: 'Added!', 
+            text: 'Product added successfully.', 
+            icon: 'success',
+            theme: 'auto',
+         });
           navigate('/'); 
         })
         .catch(err => handleError(err));
@@ -49,16 +60,16 @@ function AddProduct() {
     if (err.response && err.response.status === 400) {
       const errorData = err.response.data;
       if (errorData.sku) {
-        alert(`Error: This SKU already exists! Please use a unique SKU.`);
+        Swal.fire('Oops...', 'This SKU already exists! Please use a unique SKU.', 'error');
       } else if (errorData.name) {
-        alert(`Error: Product name issue - ${errorData.name[0]}`);
+        Swal.fire('Error', `Product name issue - ${errorData.name[0]}`, 'error');
       } else {
-        alert("Failed to save product. Please check your inputs.");
+        Swal.fire('Error', 'Failed to save product. Please check your inputs.', 'error');
       }
     } else if (err.response && err.response.status === 401) {
       return; 
     } else {
-      alert("Something went wrong on the server!");
+      Swal.fire('Server Error', 'Something went wrong on the server!', 'error');
     }
     console.error("Error saving product", err);
   };

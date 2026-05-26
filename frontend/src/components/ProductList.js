@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api';
+import Swal from 'sweetalert2';
+import { ClipLoader } from 'react-spinners';
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -10,6 +12,8 @@ function ProductList() {
   const [nextUrl, setNextUrl] = useState(null);
   const [prevUrl, setPrevUrl] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     fetchProducts(`products/?search=${searchTerm}`);
   }, [searchTerm]); 
@@ -24,13 +28,16 @@ function ProductList() {
   }, []);
   
   const fetchProducts = (url = `products/?search=${searchTerm}`) => {
+    setLoading(true);
     API.get(url)
       .then(res => {
         setProducts(res.data.results || []); 
         setNextUrl(res.data.next);      
         setPrevUrl(res.data.previous);
+        setLoading(false);
       })
       .catch(err => {
+        setLoading(false);
         if (err.response && err.response.status === 401) return;
         console.error("Error fetching products", err);
       });
@@ -42,14 +49,29 @@ function ProductList() {
   });
 
   const deleteProduct = (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
-      API.delete(`products/${id}/`)
-        .then(() => fetchProducts(`products/?search=${searchTerm}`)) 
-        .catch(err => {
-          if (err.response && err.response.status === 401) return;
-          console.error("Error deleting product", err);
-        });
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      theme: 'auto',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        API.delete(`products/${id}/`)
+          .then(() => {
+            Swal.fire('Deleted!', 'Your product has been deleted.', 'success');
+            fetchProducts(`products/?search=${searchTerm}`);
+          })
+          .catch(err => {
+            if (err.response && err.response.status === 401) return;
+            Swal.fire('Error!', 'Failed to delete the product.', 'error');
+            console.error("Error deleting product", err);
+          });
+      }
+    });
   };
 
   return (
@@ -99,63 +121,68 @@ function ProductList() {
              <button className="btn btn-secondary w-100" onClick={() => {setSearchTerm(""); setFilterCat("");}}>Reset</button>
           </div>
         </div>
-
-        <table className="table table-hover">
-          <thead className="table-dark">
-            <tr>
-              <th>Name</th>
-              <th>SKU</th>
-              <th>Category</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map(p => (
-                <tr key={p.id}>
-                  <td>{p.name}</td>
-                  <td><code>{p.sku}</code></td>
-                  <td><span className="badge bg-info text-dark">{p.category_name}</span></td>
-                  <td>{p.quantity} {p.unit ? p.unit : 'PCS'}</td>
-                  <td>
-                    {p.is_low_stock ? <span className="badge bg-danger">Low Stock</span> : <span className="badge bg-success">Okay</span>}
-                  </td>
-                  <td>
-                    <div className="d-flex">
-                      <button 
-                        className="btn btn-sm btn-outline-primary me-2" 
-                        onClick={() => navigate('/add-transaction', { state: { product: p } })}
-                        title="Update Stock"
-                      >
-                        Stock
-                      </button>
-                      <button 
-                        className="btn btn-sm btn-warning me-2" 
-                        onClick={() => navigate('/add-product', { state: { product: p } })}
-                        title="Edit"
-                      >
-                        Edit
-                      </button>
-                      <button 
-                        className="btn btn-sm btn-danger" 
-                        onClick={() => deleteProduct(p.id)}
-                        title="Delete"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
+        {loading ? (
+          <div className="d-flex justify-content-center my-5">
+             <ClipLoader color="#0d6efd" size={50} />
+          </div>
+        ) : (
+          <table className="table table-hover">
+            <thead className="table-dark">
               <tr>
-                <td colSpan="6" className="text-center py-4 text-muted">No products found matching your search.</td>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map(p => (
+                  <tr key={p.id}>
+                    <td>{p.name}</td>
+                    <td><code>{p.sku}</code></td>
+                    <td><span className="badge bg-info text-dark">{p.category_name}</span></td>
+                    <td>{p.quantity} {p.unit ? p.unit : 'PCS'}</td>
+                    <td>
+                      {p.is_low_stock ? <span className="badge bg-danger">Low Stock</span> : <span className="badge bg-success">Okay</span>}
+                    </td>
+                    <td>
+                      <div className="d-flex">
+                        <button 
+                          className="btn btn-sm btn-outline-primary me-2" 
+                          onClick={() => navigate('/add-transaction', { state: { product: p } })}
+                          title="Update Stock"
+                        >
+                          Stock
+                        </button>
+                        <button 
+                          className="btn btn-sm btn-warning me-2" 
+                          onClick={() => navigate('/add-product', { state: { product: p } })}
+                          title="Edit"
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn btn-sm btn-danger" 
+                          onClick={() => deleteProduct(p.id)}
+                          title="Delete"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-4 text-muted">No products found matching your search.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
         <div className="d-flex justify-content-between align-items-center mt-3">
           <button 
             className="btn btn-outline-primary" 

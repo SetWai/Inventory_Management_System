@@ -39,7 +39,8 @@ function AddTransaction() {
             alert("Error updating stock");
         });
     };
-
+    const currentProductObj = products.find(p => p.id.toString() === data.product.toString());
+    const unitToDisplay = currentProductObj ? (currentProductObj.unit || 'PCS') : '-';
     return (
         <div className="container mt-4">
             <div className="card p-4 shadow col-md-6 mx-auto">
@@ -58,7 +59,7 @@ function AddTransaction() {
                         >
                             <option value="">-- Choose Product --</option>
                             {products.map(p => (
-                                <option key={p.id} value={p.id}>{p.name} (Current: {p.quantity})</option>
+                                <option key={p.id} value={p.id}>{p.name} (Current: {p.quantity} {p.unit || 'PCS'})</option>
                             ))}
                         </select>
                     </div>
@@ -79,17 +80,22 @@ function AddTransaction() {
                     </div>
 
                     <div className="mb-3">
-                        <label htmlFor="quantityInput" className="form-label">Quantity</label>
-                        <input 
-                            type="number" 
-                            id="quantityInput" 
-                            name="quantity"    
-                            className="form-control" 
-                            placeholder="Enter Quantity" 
-                            value={data.quantity === 0 ? '' : data.quantity}
-                            onChange={(e) => setData({...data, quantity: e.target.value})} 
-                            required
-                        />
+                        <label htmlFor="quantity" className="form-label">Quantity & Unit</label>
+                        <div className="input-group">
+                            <input 
+                                type="number" 
+                                id="quantityInput" 
+                                name="quantity"    
+                                className="form-control" 
+                                placeholder="Enter Quantity" 
+                                value={data.quantity === 0 ? '' : data.quantity}
+                                onChange={(e) => setData({...data, quantity: e.target.value})} 
+                                required
+                            />
+                            <span className="input-group-text bg-secondary text-white" style={{ minWidth: '80px', justifyContent: 'center' }}>
+                                {unitToDisplay}
+                            </span>
+                        </div>
                     </div>
                     
                     <div className="mb-3">

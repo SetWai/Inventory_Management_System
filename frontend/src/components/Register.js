@@ -7,7 +7,7 @@ function Register() {
     username: '', 
     password: '', 
     confirmPassword: '',
-    secret_code: '' // 🌟 secret_code state အသစ်
+    secret_code: '' 
   });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function Register() {
       await API.post('register/', {
         username: credentials.username,
         password: credentials.password,
-        secret_code: credentials.secret_code // 🌟 API ဆီသို့ လျှို့ဝှက်ကုဒ်ပါ တွဲဖက်ပေးပို့ခြင်း
+        secret_code: credentials.secret_code 
       });
       alert("Registration Successful! Please login.");
       navigate('/login'); 
@@ -61,7 +61,6 @@ function Register() {
             />
           </div>
 
-          {/* Secret Invitation Code Field (ထည့်သွင်းလိုက်သော အကွက်အသစ်) */}
           <div className="mb-3">
             <label htmlFor="secretCode" className="form-label visually-hidden">Secret Invitation Code</label>
             <input 
@@ -76,7 +75,6 @@ function Register() {
             />
           </div>
 
-          {/* Password Field */}
           <div className="mb-3">
             <label htmlFor="password" className="form-label visually-hidden">Password</label>
             <div className="input-group border rounded bg-white">
@@ -100,7 +98,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Confirm Password Field */}
           <div className="mb-3">
             <label htmlFor="confirmPassword" className="form-label visually-hidden">Confirm Password</label>
             <input 
