@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import API from '../api';
+import Swal from 'sweetalert2';
 
-function AddTransaction() {
+function AddTransaction({ isDarkMode }) {
     const navigate = useNavigate();
     const location = useLocation();
     const [products, setProducts] = useState([]);
@@ -31,19 +32,33 @@ function AddTransaction() {
         e.preventDefault();
         API.post('transactions/', data)
           .then(() => {
-            alert("Stock Updated Successfully!");
-            navigate('/');
+            Swal.fire({
+                title: 'Success!',
+                text: 'Stock Updated Successfully.',
+                icon: 'success',
+                theme: isDarkMode ? 'dark' : 'light', 
+                confirmButtonColor: '#198754'
+            }).then(() => {
+                navigate('/');
+            });
         })
         .catch(err => {
             if (err.response && err.response.status === 401) return;
-            alert("Error updating stock");
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to update stock. Please try again.',
+                icon: 'error',
+                theme: isDarkMode ? 'dark' : 'light',
+                confirmButtonColor: '#d33'
+            });
+            console.error("Error updating stock", err);
         });
     };
     const currentProductObj = products.find(p => p.id.toString() === data.product.toString());
     const unitToDisplay = currentProductObj ? (currentProductObj.unit || 'PCS') : '-';
     return (
         <div className="container mt-4">
-            <div className="card p-4 shadow col-md-6 mx-auto">
+            <div className={`card p-4 shadow col-md-6 mx-auto ${isDarkMode ? 'bg-secondary text-white' : ''}`}>
                 <h4 className="mb-4">Update Stock (In/Out)</h4>
                 <form onSubmit={handleSubmit}>
                     
@@ -52,7 +67,7 @@ function AddTransaction() {
                         <select 
                             id="productSelect" 
                             name="product"     
-                            className="form-select" 
+                            className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                             value={data.product}
                             onChange={(e) => setData({...data, product: e.target.value})}
                             required
@@ -69,7 +84,7 @@ function AddTransaction() {
                         <select 
                             id="typeSelect"           
                             name="transaction_type"   
-                            className="form-select" 
+                            className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                             value={data.transaction_type}
                             onChange={(e) => setData({...data, transaction_type: e.target.value})}
                             required
@@ -86,7 +101,7 @@ function AddTransaction() {
                                 type="number" 
                                 id="quantityInput" 
                                 name="quantity"    
-                                className="form-control" 
+                                className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                                 placeholder="Enter Quantity" 
                                 value={data.quantity === 0 ? '' : data.quantity}
                                 onChange={(e) => setData({...data, quantity: e.target.value})} 
@@ -103,7 +118,7 @@ function AddTransaction() {
                         <textarea 
                             id="notesTextarea"
                             name="notes"       
-                            className="form-control" 
+                            className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                             placeholder="Optional notes..." 
                             value={data.notes}
                             onChange={(e) => setData({...data, notes: e.target.value})}

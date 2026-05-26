@@ -2,10 +2,10 @@ import React from 'react';
 import InventoryChart from './InventoryChart';
 import TransactionHistory from './TransactionHistory';
 
-function Dashboard() {
+function Dashboard({ isDarkMode }) {
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4 text-primary">Inventory Dashboard</h2>
+    <div className={`card shadow-sm p-4 ${isDarkMode ? 'bg-secondary text-white' : ''}`}>
+      <h2 className="mb-4">Inventory Dashboard</h2>
       
       <div className="row">
         <div className="col-12 mb-5">

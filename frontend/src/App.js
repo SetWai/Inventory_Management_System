@@ -48,36 +48,36 @@ function App() {
   return (
     <Router>
       <NavigationInterceptor setToken={setToken} />
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow">
+      <nav className={`navbar navbar-expand-lg ${isDarkMode ? 'navbar-dark bg-dark border-bottom border-secondary' : 'navbar-light bg-light border-bottom'}`}>
         <div className="container">
           <Link className="navbar-brand fw-bold" to="/">Inventory</Link>
-          
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center gap-2 ms-auto">
             {token && (
               <>
                 <NavLink 
                   to="/" 
-                  className={({ isActive }) => isActive ? "btn btn-primary me-2" : "btn btn-outline-light me-2"}
+                  className={`btn btn-sm me-2 ${isDarkMode ? 'btn-outline-light' : 'btn-outline-primary'}`}
                 >
                   Home
                 </NavLink>
                 <NavLink 
                   to="/dashboard" 
-                  className={({ isActive }) => isActive ? "btn btn-primary me-2" : "btn btn-outline-light me-2"}
+                  className={`btn btn-sm me-2 ${isDarkMode ? 'btn-outline-light' : 'btn-outline-primary'}`}
                 >
                   Dashboard
                 </NavLink>
                 <button className="btn btn-outline-danger ms-3" onClick={handleLogout}>
                   Logout
                 </button>
-                <button 
-                  className={`btn btn-primary me-2 ${isDarkMode ? 'btn-light' : 'btn-dark'}`} 
-                  onClick={toggleDarkMode}
-                >
-                  {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-                </button>
               </>
             )}
+            <button 
+              className={`btn btn-sm ${isDarkMode ? 'btn-light text-dark' : 'btn-dark text-light'} ms-2`} 
+              onClick={toggleDarkMode}
+              style={{ width: '120px' }} 
+            >
+              {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+            </button>
           </div>
         </div>
       </nav>

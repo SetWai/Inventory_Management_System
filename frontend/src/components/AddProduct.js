@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import API from '../api';
 import Swal from 'sweetalert2';
 
-function AddProduct() {
+function AddProduct({ isDarkMode }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [categories, setCategories] = useState([]);
@@ -36,7 +36,7 @@ function AddProduct() {
             title: 'Updated!', 
             text: 'Product updated successfully.', 
             icon: 'success',
-            theme: 'auto',
+            theme: isDarkMode ? 'dark' : 'light', 
          });
           navigate('/');
         })
@@ -48,7 +48,7 @@ function AddProduct() {
             title: 'Added!', 
             text: 'Product added successfully.', 
             icon: 'success',
-            theme: 'auto',
+            theme: isDarkMode ? 'dark' : 'light', 
          });
           navigate('/'); 
         })
@@ -76,7 +76,7 @@ function AddProduct() {
 
   return (
     <div className="container mt-4">
-      <div className="card p-4 shadow-sm col-md-8 mx-auto">
+      <div className={`card p-4 shadow col-md-6 mx-auto ${isDarkMode ? 'bg-secondary text-white' : ''}`}>
         <h3 className="mb-4">{editData ? "Edit Product" : "Add New Product"}</h3>
         <form onSubmit={handleSubmit}>
           
@@ -87,7 +87,7 @@ function AddProduct() {
               id="name" 
               name="name" 
               autoComplete="off"
-              className="form-control" 
+              className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={data.name} 
               onChange={(e) => setData({...data, name: e.target.value})}
               required 
@@ -101,7 +101,7 @@ function AddProduct() {
               id="sku" 
               name="sku" 
               autoComplete="off"
-              className="form-control" 
+              className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={data.sku} 
               onChange={(e) => setData({...data, sku: e.target.value})}
               required 
@@ -113,7 +113,7 @@ function AddProduct() {
             <select 
               id="category" 
               name="category" 
-              className="form-select" 
+              className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={data.category} 
               onChange={(e) => setData({...data, category: e.target.value})}
               required
@@ -132,7 +132,7 @@ function AddProduct() {
                 type="number" 
                 id="quantity"
                 name="quantity"
-                className="form-control" 
+                className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                 placeholder="0" 
                 value={data.quantity}
                 onChange={(e) => setData({...data, quantity: e.target.value})} 
@@ -140,7 +140,7 @@ function AddProduct() {
               />
               
               <select 
-                className="form-select bg-light" 
+                className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                 value={data.unit}
                 onChange={(e) => setData({...data, unit: e.target.value})}
                 style={{ maxWidth: '120px', cursor: 'pointer' }} 

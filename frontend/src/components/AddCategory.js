@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api';
 
-function AddCategory() {
+function AddCategory({ isDarkMode }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ function AddCategory() {
 
   return (
     <div className="container mt-4">
-      <div className="card shadow p-4 col-md-6 mx-auto">
+      <div className={`card p-4 shadow col-md-6 mx-auto ${isDarkMode ? 'bg-secondary text-white' : ''}`}>
         <h3 className="mb-4">Add New Category</h3>
         <form onSubmit={handleSubmit}>
           
@@ -33,7 +33,7 @@ function AddCategory() {
               id="categoryName"     
               name="categoryName"   
               autoComplete="off"   
-              className="form-control" 
+              className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={name} 
               onChange={(e) => setName(e.target.value)} 
               placeholder="e.g., Flour, Dairy, Spices"
@@ -47,7 +47,7 @@ function AddCategory() {
               id="categoryDesc"     
               name="categoryDesc"   
               autoComplete="off"    
-              className="form-control" 
+              className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={description} 
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>

@@ -4,7 +4,7 @@ import API from '../api';
 import Swal from 'sweetalert2';
 import { ClipLoader } from 'react-spinners';
 
-function ProductList() {
+function ProductList({ isDarkMode }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]); 
   const [searchTerm, setSearchTerm] = useState(""); 
@@ -76,14 +76,14 @@ function ProductList() {
 
   return (
     <div className="container mt-2">
-      <div className="card shadow-sm p-4">
+      <div className={`card shadow-sm p-4 ${isDarkMode ? 'bg-secondary text-white' : ''}`}>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h3 className="mb-0">Inventory Items</h3>
           <div>
-            <Link to="/add-category" className="btn btn-outline-success me-2">
+            <Link to="/add-category" className={`btn me-2 ${isDarkMode ? 'btn-success' : 'btn-outline-success'}`}>
               + Add Category
             </Link>
-            <Link to="/add-product" className="btn btn-outline-success me-2">
+            <Link to="/add-product" className={`btn ${isDarkMode ? 'btn-success' : 'btn-outline-success'}`}>
               + Add Product
             </Link>
           </div>
@@ -96,7 +96,7 @@ function ProductList() {
               type="text" 
               id="searchProduct"     
               name="searchProduct"  
-              className="form-control" 
+              className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               placeholder="Search by Name or SKU..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -107,7 +107,7 @@ function ProductList() {
             <select 
               id="filterCategory"    
               name="filterCategory" 
-              className="form-control form-select" 
+              className={`form-control form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={filterCat}
               onChange={(e) => setFilterCat(e.target.value)}
             >
@@ -126,8 +126,8 @@ function ProductList() {
              <ClipLoader color="#0d6efd" size={50} />
           </div>
         ) : (
-          <table className="table table-hover">
-            <thead className="table-dark">
+          <table className={`table table-hover ${isDarkMode ? 'table-dark' : ''}`}>
+            <thead className={isDarkMode ? '' : 'table-dark'}>
               <tr>
                 <th>Name</th>
                 <th>SKU</th>
@@ -185,7 +185,7 @@ function ProductList() {
         )}
         <div className="d-flex justify-content-between align-items-center mt-3">
           <button 
-            className="btn btn-outline-primary" 
+            className={`btn me-2 ${isDarkMode ? 'btn-success' : 'btn-outline-success'}`}
             onClick={() => fetchProducts(prevUrl)} 
             disabled={!prevUrl}
           >
@@ -193,7 +193,7 @@ function ProductList() {
           </button>
           
           <button 
-            className="btn btn-outline-primary" 
+            className={`btn me-2 ${isDarkMode ? 'btn-success' : 'btn-outline-success'}`}
             onClick={() => fetchProducts(nextUrl)} 
             disabled={!nextUrl} 
           >
