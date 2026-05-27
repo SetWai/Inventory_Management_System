@@ -46,7 +46,6 @@ class StockTransaction(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        # Transaction အသစ်ဖြစ်မှသာ Stock ကို ပြင်မည်
         if not self.pk:
             if self.transaction_type == 'IN':
                 self.product.quantity += self.quantity
