@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import API from '../api';
 import { useNavigate, Link } from 'react-router-dom';
 
-function Register() {
+function Register({ isDarkMode }) {
   const [credentials, setCredentials] = useState({ 
     username: '', 
     password: '', 
@@ -30,7 +30,6 @@ function Register() {
       navigate('/login'); 
     } catch (err) {
       if (err.response && err.response.status === 429) {
-        // 🌟 Rate limit မိသွားတဲ့အခါ ပြသမည့် မက်ဆေ့ခ်ျ
         alert("Too many requests! Please wait a minute before trying again.");
       } else if (err.response && err.response.data && err.response.data.error) {
         alert(err.response.data.error); 
@@ -42,7 +41,7 @@ function Register() {
 
   return (
     <div className="container mt-5">
-      <div className="card p-4 mx-auto shadow" style={{ maxWidth: '400px' }}>
+      <div className={`card p-4 mx-auto shadow ${isDarkMode ? 'bg-secondary text-white border-secondary' : ''}`} style={{ maxWidth: '400px' }}>
         <h3 className="text-center mb-4">Create Account</h3>
         <form onSubmit={handleRegister}>
           
@@ -54,7 +53,7 @@ function Register() {
               id="username"
               name="username"
               autoComplete="username"
-              className="form-control" 
+              className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`} 
               placeholder="Choose Username" 
               onChange={(e) => setCredentials({...credentials, username: e.target.value})} 
               required 
@@ -68,7 +67,7 @@ function Register() {
               id="secretCode"
               name="secret_code"
               autoComplete="off"
-              className="form-control" 
+              className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               placeholder="Secret Invitation Code" 
               onChange={(e) => setCredentials({...credentials, secret_code: e.target.value})} 
               required 
@@ -77,21 +76,22 @@ function Register() {
 
           <div className="mb-3">
             <label htmlFor="password" className="form-label visually-hidden">Password</label>
-            <div className="input-group border rounded bg-white">
+            <div className="input-group">
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password"
                 name="password"
                 autoComplete="new-password"
-                className="form-control border-0 shadow-none" 
+                className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`} 
                 placeholder="Password" 
                 onChange={(e) => setCredentials({...credentials, password: e.target.value})} 
                 required 
               />
               <button 
                 type="button" 
-                className="btn border-0 shadow-none bg-transparent text-secondary"
+                className={`input-group-text ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-white'}`}
                 onClick={() => setShowPassword(!showPassword)}
+                style={{ zIndex: 10 }}
               >
                 <i className={showPassword ? "bi bi-eye-slash-fill" : "bi bi-eye-fill"}></i>
               </button>
@@ -105,7 +105,7 @@ function Register() {
               id="confirmPassword"
               name="confirmPassword"
               autoComplete="new-password"
-              className="form-control" 
+              className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               placeholder="Confirm Password" 
               onChange={(e) => setCredentials({...credentials, confirmPassword: e.target.value})} 
               required 
@@ -115,8 +115,8 @@ function Register() {
           <button className="btn btn-success w-100 mt-2">Register</button>
           
           <div className="text-center mt-3">
-            <span className="text-muted">Already have an account? </span>
-            <Link to="/login" className="text-decoration-none">Login</Link>
+            <span className={isDarkMode ? 'text-light' : 'text-muted'}>Already have an account? </span>
+            <Link to="/login" className={`text-decoration-none ${isDarkMode ? 'text-info' : ''}`}>Login</Link>
           </div>
         </form>
       </div>

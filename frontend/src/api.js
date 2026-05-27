@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://inventory-management-system-3rux.onrender.com',
+  baseURL: 'https://inventory-management-system-3rux.onrender.com/api/',
 });
 
 let navigateFunction = null;
