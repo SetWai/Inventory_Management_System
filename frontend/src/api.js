@@ -28,7 +28,7 @@ API.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       if (error.config.url.includes('token/')) {
-        return Promise.reject(error); // Login အမှားအတွက်ကတော့ error ဆက်လွှတ်ပေးရပါမယ်
+        return Promise.reject(error); 
       }
 
       localStorage.removeItem('token');
@@ -40,10 +40,6 @@ API.interceptors.response.use(
       if (navigateFunction) {
         navigateFunction('/login?expired=true');
       }
-
-      // 🌟 [ဒီနေရာက အရေးကြီးဆုံး ပြင်ဆင်မှုပါ]
-      // Promise.reject(error) အစား ဒါကို သုံးလိုက်ခြင်းဖြင့် React ဘက်ကို Error မရောက်တော့ဘဲ
-      // အခုနက အနီရောင် Uncaught Runtime Errors Screen ကြီး လုံးဝ ပေါ်မလာတော့ပါဘူး။
       return new Promise(() => {}); 
     }
     return Promise.reject(error);

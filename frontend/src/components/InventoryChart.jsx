@@ -13,7 +13,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-function InventoryChart() {
+function InventoryChart({ isDarkMode }) {
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
   useEffect(() => {
@@ -35,19 +35,51 @@ function InventoryChart() {
       console.error("Error fetching data for chart:", err);
     });
   }, []);
-
+  const chartOptions = {
+    responsive: true, 
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: isDarkMode ? '#f8f9fa' : '#212529', 
+        }
+      }
+    },
+    scales: { 
+      x: { 
+        ticks: {
+          color: isDarkMode ? '#e9ecef' : '#6c757d',
+        },
+        border: {
+          display: true,
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+        },
+        grid: {
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          drawTicks: false, 
+        }
+      },
+      y: { 
+        beginAtZero: true,
+        ticks: {
+          color: isDarkMode ? '#e9ecef' : '#6c757d',
+        },
+        border: {
+          display: true,
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+        },
+        grid: {
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          drawTicks: false, 
+        }
+      } 
+    }
+  };
   return (
-    <div className="card shadow-sm p-4 mb-4">
+    <div className={`card shadow-sm p-4 ${isDarkMode ? 'bg-secondary text-white border-secondary' : ''}`}>
       <h5>Stock Levels Overview</h5>
       <div style={{ height: '300px' }}>
-        <Bar 
-          data={chartData} 
-          options={{ 
-            responsive: true, 
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true } }
-          }} 
-        />
+        <Bar data={chartData} options={chartOptions} />
       </div>
     </div>
   );

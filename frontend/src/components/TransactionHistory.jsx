@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import API from '../api';
 
-function TransactionHistory() {
+function TransactionHistory({ isDarkMode }) {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
@@ -10,8 +10,8 @@ function TransactionHistory() {
 
   return (
     <div className="table-responsive">
-      <table className="table table-hover mb-0">
-        <thead className="table-light">
+      <table className={`table table-hover mb-0 ${isDarkMode ? 'table-dark' : ''}`}>
+        <thead className={`table-header  mb-0 ${isDarkMode ? 'table-dark' : ''}`}>
           <tr>
             <th>Date</th>
             <th>Product</th>

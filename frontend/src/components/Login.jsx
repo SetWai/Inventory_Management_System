@@ -3,9 +3,7 @@ import API from '../api';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-
-
-function Login({ setToken }) { 
+function Login({ setToken, isDarkMode}) { 
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
@@ -13,7 +11,12 @@ function Login({ setToken }) {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('expired') === 'true') {
-      Swal.fire('Your session has expired. Please login again!');
+      Swal.fire({
+        title: 'Session Expired',
+        text: 'Your session has expired. Please login again!',
+        icon: 'warning',
+        theme: isDarkMode ? 'dark' : 'light' 
+      });
       navigate('/login', { replace: true });
     }
   }, [navigate]);
@@ -27,7 +30,12 @@ function Login({ setToken }) {
       setToken(res.data.access); 
       navigate('/'); 
     } catch (err) {
-      Swal.fire('Wrong username or password! Please try again.');
+      Swal.fire({
+        title: 'Error!',
+        text: 'Wrong username or password! Please try again.',
+        icon: 'error',
+        theme: isDarkMode ? 'dark' : 'light'
+      });
     }
   };
 
@@ -36,8 +44,8 @@ function Login({ setToken }) {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card p-4 mx-auto shadow" style={{ maxWidth: '400px' }}>
+    <div className="container mt-5 d-flex justify-content-center">
+      <div className={`card p-4 shadow-sm ${isDarkMode ? 'bg-secondary text-white border-secondary' : ''}`} style={{ width: '100%', maxWidth: '400px' }}>
         <h3 className="text-center">Inventory Login</h3>
         <form onSubmit={handleLogin}>
           
@@ -48,7 +56,7 @@ function Login({ setToken }) {
               id="username"
               name="username"
               autoComplete="username" 
-              className="form-control" 
+              className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               placeholder="Username" 
               onChange={(e) => setCredentials({...credentials, username: e.target.value})} 
               required 
@@ -57,20 +65,20 @@ function Login({ setToken }) {
 
           <div className="mb-3">
             <label htmlFor="password" className="form-label visually-hidden">Password</label>
-            <div className="input-group border rounded bg-white"> 
+            <div className="input-group"> 
               <input 
                 type={showPassword ? "text" : "password"} 
                 id="password"
                 name="password"
                 autoComplete="current-password"
-                className="form-control border-0 shadow-none"
+                className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                 placeholder="Password" 
                 onChange={(e) => setCredentials({...credentials, password: e.target.value})} 
                 required 
               />
               <button 
                 type="button" 
-                className="btn border-0 shadow-none bg-transparent text-secondary"
+                className={`input-group-text ${isDarkMode ? 'bg-dark text-light border-secondary' : 'bg-white'}`}
                 onClick={togglePasswordVisibility}
                 style={{ zIndex: 10 }} 
               >
@@ -81,8 +89,8 @@ function Login({ setToken }) {
 
           <button className="btn btn-primary w-100">Login</button>
           <div className="text-center mt-3">
-            <span className="text-muted">Don't have an account? </span>
-            <Link to="/register" className="text-decoration-none">Register here</Link> 
+            <span className={isDarkMode ? 'text-light' : 'text-muted'}>Don't have an account? </span>
+            <Link to="/register" className={`text-decoration-none ${isDarkMode ? 'text-info' : ''}`}>Register here</Link> 
           </div>
         </form>
       </div>

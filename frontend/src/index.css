@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-control.bg-dark::placeholder {
+  color: #6c757d !important;
+  opacity: 1;
+}
+
+textarea.form-control.bg-dark::placeholder {
+  color: #6c757d !important;
+}
+
+.bg-dark:-webkit-autofill,
+.bg-dark:-webkit-autofill:hover, 
+.bg-dark:-webkit-autofill:focus, 
+.bg-dark:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #212529 inset !important; 
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}

@@ -47,7 +47,7 @@ function AddCategory({ isDarkMode }) {
               id="categoryDesc"     
               name="categoryDesc"   
               autoComplete="off"    
-              className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
+              className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
               value={description} 
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>

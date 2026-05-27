@@ -51,30 +51,36 @@ function App() {
       <nav className={`navbar navbar-expand-lg ${isDarkMode ? 'navbar-dark bg-dark border-bottom border-secondary' : 'navbar-light bg-light border-bottom'}`}>
         <div className="container">
           <Link className="navbar-brand fw-bold" to="/">Inventory</Link>
-          <div className="d-flex align-items-center gap-2 ms-auto">
+          <div className="d-flex align-items-center gap-3 ms-auto">
             {token && (
               <>
                 <NavLink 
                   to="/" 
-                  className={`btn btn-sm me-2 ${isDarkMode ? 'btn-outline-light' : 'btn-outline-primary'}`}
+                  className={({ isActive }) => `btn fw-medium d-flex justify-content-center align-items-center ${isActive ? (isDarkMode ? 'btn-light text-dark' : 'btn-primary') : (isDarkMode ? 'btn-outline-light' : 'btn-outline-primary')}`}
+                  style={{ width: '110px', height: '40px' }}
                 >
                   Home
                 </NavLink>
                 <NavLink 
                   to="/dashboard" 
-                  className={`btn btn-sm me-2 ${isDarkMode ? 'btn-outline-light' : 'btn-outline-primary'}`}
+                  className={({ isActive }) => `btn fw-medium d-flex justify-content-center align-items-center ${isActive ? (isDarkMode ? 'btn-light text-dark' : 'btn-primary') : (isDarkMode ? 'btn-outline-light' : 'btn-outline-primary')}`}
+                  style={{ width: '110px', height: '40px' }}
                 >
                   Dashboard
                 </NavLink>
-                <button className="btn btn-outline-danger ms-3" onClick={handleLogout}>
+                <button
+                  className="btn btn-outline-danger fw-medium d-flex justify-content-center align-items-center" 
+                  onClick={handleLogout}
+                  style={{ width: '110px', height: '40px' }}
+                >
                   Logout
                 </button>
               </>
             )}
             <button 
-              className={`btn btn-sm ${isDarkMode ? 'btn-light text-dark' : 'btn-dark text-light'} ms-2`} 
+              className={`btn fw-medium d-flex justify-content-center align-items-center ${isDarkMode ? 'btn-light text-dark' : 'btn-dark text-light'}`} 
               onClick={toggleDarkMode}
-              style={{ width: '120px' }} 
+              style={{ width: '135px', height: '40px' }}
             >
               {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
             </button>

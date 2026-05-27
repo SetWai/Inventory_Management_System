@@ -118,7 +118,7 @@ function AddTransaction({ isDarkMode }) {
                         <textarea 
                             id="notesTextarea"
                             name="notes"       
-                            className={`form-select ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
+                            className={`form-control ${isDarkMode ? 'bg-dark text-light border-secondary' : ''}`}
                             placeholder="Optional notes..." 
                             value={data.notes}
                             onChange={(e) => setData({...data, notes: e.target.value})}
